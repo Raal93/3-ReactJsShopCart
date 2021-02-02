@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>JSX - składnia React do tworzenie struktury</title>
+	<!-- Plik ze stylami css -->
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<!-- Element HTML pełniący rolę kontenera dla aplikacji React -->
+	<div id="root"></div>
+	<!-- Biblioteka React -->
+	<script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+	<!-- Biblioteka React DOM -->
+	<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+	<!-- Babel - Nie korzystamy na produkcji (tylko podczas developmentu) -->
+	<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+	<!-- Nasz kod - kompilowanie JSX i ES6 do ES5 - zwróc uwagę na atrybut type (domyślnie: type='text/javascript -->
+	<script type="text/babel">
+
+		class App extends React.Component {
+  state = {
+    availableProducts: 5,
+    shoppingCart: 1
+  }
+
+  handleAddToCart = () => {
+    this.setState({
+      shoppingCart: this.state.shoppingCart + 1
+    })
+  }
+  
+  handleRemoveFromCart = () => {
+    this.setState({
+      shoppingCart: this.state.shoppingCart - 1
+    })
+  }
+
+  handleBuy = () => {
+    this.setState({
+      shoppingCart: 0,
+      availableProducts: this.state.availableProducts - this.state.shoppingCart
+    })
+  }
+
+  render() {
+    const style = this.state.shoppingCart > 0 ? {} : { opacity: "0.3" };
+
+    const {shoppingCart, availableProducts} = this.state
+
+    return (
+      <>
+        <button
+          disabled={shoppingCart ? false : true}
+          onClick={this.handleRemoveFromCart}
+        >-
+        </button>
+        <span
+          style={style}>
+          {shoppingCart}
+        </span>
+        <button
+          disabled={shoppingCart === availableProducts ? true : false}
+          onClick={this.handleAddToCart}
+        >+
+        </button>
+        {shoppingCart > 0 ?
+          <button onClick={this.handleBuy}>Buy
+          </button> : null
+        }
+      </>
+    )
+  }
+}
+
+
+
+
+
+ReactDOM.render(<App />, document.getElementById('root'))
+		
+	</script>
+</body>
+
+</html>
